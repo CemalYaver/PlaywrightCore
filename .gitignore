@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Playwright
+playwright-report/
+test-results/
+.blob-report/
+
+# Environment
+.env*
+!.env.prod.example
+
+# Build output
+dist/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+
+# OS
+.DS_Store

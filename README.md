@@ -315,5 +315,6 @@ Playwright provides built-in tools to help debug failing tests and analyze test 
 use: {
   trace: 'on-first-retry',       // records trace only on first retry
   screenshot: 'only-on-failure'  // captures screenshot only if the test fails
+  video: 'retain-on-failure',    // save video if test fails
 }
 ```

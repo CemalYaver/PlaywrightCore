@@ -300,21 +300,93 @@ steps:
   displayName: 'Run Playwright tests'
  ```
 
-# 🐞11. Debugging & Test Reports
+# 🐞 11. Debugging & Test Reports
 
 Playwright provides built-in tools to help debug failing tests and analyze test runs:
 
-- **Trace Viewer** – inspect test execution step by step  
-- **Screenshots on failure** – automatically capture screenshots when a test fails  
-- **Video recordings** – record test runs for visual debugging  
-- **HTML test reports** – view structured results in a browser  
+- **Trace Viewer** – Inspect test execution step by step  
+- **Screenshots on failure** – Automatically capture screenshots when a test fails  
+- **Video recordings** – Record test runs for visual debugging  
+- **HTML test reports** – View structured results in a browser  
+- **Allure Reports** – Advanced reporting with history, trends, and detailed insights  
 
-### Example Playwright config
+---
 
-```ts
+### ⚙️ Example Playwright Configuration
+
+```playwright.config.ts
+export default defineConfig({
+
+  reporter: [
+    ['list'],
+    ['html', { open: isCI ? 'never' : 'on-failure' }],  // Playwright report
+    ['allure-playwright']   // Allure report
+  ],
+
 use: {
-  trace: 'on-first-retry',       // records trace only on first retry
-  screenshot: 'only-on-failure'  // captures screenshot only if the test fails
-  video: 'retain-on-failure',    // save video if test fails
+  trace: 'on-first-retry',        // Records trace only on the first retry
+  screenshot: 'only-on-failure',  // Captures screenshots on failure
+  video: 'retain-on-failure',     // Saves video for failed tests
 }
+});
 ```
+
+## 📊 Playwright HTML Report
+
+Generate and open report:
+```bash
+npx playwright show-report
+```
+Automatically generated after test execution.
+
+
+## ⚙️ Allure Setup
+
+To use Allure reports, install the required dependencies:
+
+```bash
+npm install --save-dev allure-playwright allure-commandline
+```
+- **allure-playwright** → Integrates Allure with Playwright. It hooks into the test execution process and automatically collects test results, attachments (screenshots, videos, traces), and generates the `allure-results/` directory.
+
+- **allure-commandline** → A CLI tool that transforms `allure-results/` into an interactive HTML report (`allure-report/`) and allows viewing it in the browser.
+
+
+## 📈 Allure Report
+
+To generate and view Allure report:
+
+1. **Clean previous reports** (optional but recommended):
+```bash
+rm -rf allure-results allure-report
+```
+
+2. **Run tests:**
+
+```bash
+ENV=test LANG=en npx playwright test
+```
+3. **Generate report:**
+
+```bash
+npx allure generate allure-results --clean -o allure-report
+```
+
+4. **Open report:**
+
+```bash
+npx allure open allure-report
+```
+
+## ⚖️ Difference Between Playwright HTML Report and Allure Report
+
+**Playwright HTML Report**
+- Automatically generated after test execution  
+- Can be opened with a single command  
+- `npx playwright show-report` is enough  
+
+**Allure Report**
+- Requires manual generation  
+- Uses a two-step process:  
+  - `allure-results` → generated during test execution  
+  - `allure-report` → generated from results 

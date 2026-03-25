@@ -7,6 +7,12 @@ export default defineConfig({
   testDir: './tests',
   timeout: 60_000, // max duration for a full test
 
+  reporter: [
+    ['list'],
+    ['html', { open: isCI ? 'never' : 'on-failure' }],  // Playwright report
+    ['allure-playwright']   // Allure report
+  ],
+
   // max number of parallel workers; limit in CI for stability
   workers: isCI ? 2 : undefined,  
 
